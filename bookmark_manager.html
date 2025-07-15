@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Links Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            border-radius: 2px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(255, 107, 107, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 107, 107, 0.8), 0 0 30px rgba(78, 205, 196, 0.5); }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s ease-in-out infinite;
+        }
+
+        @keyframes textShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+
+        .site-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(39, 174, 96, 0.2);
+            border: 1px solid #27ae60;
+            color: #27ae60;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .site-status.offline {
+            background: rgba(255, 71, 87, 0.2);
+            border-color: #ff4757;
+            color: #ff4757;
+        }
+
+        .secret-access {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        .secret-access:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .admin-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.3);
+        }
+
+        .admin-menu {
+            display: none;
+            text-align: center;
+        }
+
+        .admin-menu h2 {
+            color: #4ecdc4;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+        }
+
+        .menu-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .menu-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .menu-btn:hover::before {
+            left: 100%;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .menu-btn-icon {
+            font-size: 20px;
+        }
+
+        .shutdown-btn {
+            background: linear-gradient(45deg, #ff4757, #ff3838) !important;
+        }
+
+        .shutdown-btn:hover {
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.4) !important;
+        }
+
+        .add-form {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4ecdc4;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .back-btn {
+            background: #6c757d;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .category-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-icon {
+            font-size: 1.2em;
+        }
+
+        .gaming { border-left: 4px solid #ff6b6b; }
+        .programming { border-left: 4px solid #4ecdc4; }
+
+        .link-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .link-item:hover::before {
+            opacity: 1;
+        }
+
+        .link-item:hover {
+            transform: translateX(5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .link-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .link-url {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-size: 0.9em;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .link-url:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            float: right;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            display: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+        }
+
+        .delete-mode .delete-btn {
+            display: block;
+        }
+
+        .delete-btn:hover {
+            background: #ff3838;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.5);
+        }
+
+        .delete-btn:active {
+            transform: scale(0.95);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .access-granted {
+            text-align: center;
+            color: #4ecdc4;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .error-message {
+            color: #ff4757;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Updated .site-offline for the giant popup */
+        .site-offline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98); /* More opaque background */
+            display: none; /* Initially hidden */
+            align-items: center;
+            justify-content: center;
+            z-index: 9999; /* Higher z-index to ensure it's on top */
+            flex-direction: column; /* To stack message and button */
+        }
+
+        .offline-message {
+            text-align: center;
+            color: #ff4757;
+            font-size: 3.5em; /* Larger font size */
+            font-weight: 700; /* Bolder font */
+            animation: pulse 1.5s infinite alternate; /* Add a pulse animation */
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(255, 71, 87, 0.6); /* Text shadow for emphasis */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .offline-message-subtitle {
+            font-size: 1.5em;
+            color: #e0e0e0;
+            margin-bottom: 50px;
+        }
+
+        .admin-reopen-btn {
+            background: linear-gradient(45deg, #4ecdc4, #2ecc71);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+        }
+
+        .admin-reopen-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(78, 205, 196, 0.6);
+        }
+
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .categories {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .admin-content {
+                padding: 20px;
+            }
+
+            .menu-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .offline-message {
+                font-size: 2.5em;
+            }
+            .offline-message-subtitle {
+                font-size: 1em;
+            }
+            .admin-reopen-btn {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="site-offline" class="site-offline">
+        <div class="offline-message">
+            🔒 Site is Currently Offline
+        </div>
+        <div class="offline-message-subtitle">
+            This site is temporarily unavailable. Please check back later.
+        </div>
+        <button class="admin-reopen-btn" onclick="openAdminPanelFromOffline()">
+            Admin Re-open Site
+        </button>
+    </div>
+
+    <div class="site-status" id="site-status">🟢 Online</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Dev Links Hub</h1>
+            <p class="subtitle">Curated Gaming & Programming Resources</p>
+        </div>
+
+        <div class="categories">
+            <div class="category gaming">
+                <div class="category-title">
+                    <span class="category-icon">🎮</span>
+                    Gaming
+                </div>
+                <div id="gaming-links">
+                    <div class="empty-state">No gaming links available yet.</div>
+                </div>
+            </div>
+
+            <div class="category programming">
+                <div class="category-title">
+                    <span class="category-icon">💻</span>
+                    Programming
+                </div>
+                <div id="programming-links">
+                    <div class="empty-state">No programming links available yet.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="secret-access" onclick="openAdminPanel()">
+        🔐 Admin
+    </div>
+
+    <div id="admin-panel" class="admin-panel">
+        <div class="admin-content">
+            <div id="code-section">
+                <h2 style="text-align: center; margin-bottom: 20px; color: #4ecdc4;">Enter Access Code</h2>
+                <input type="password" id="access-code" class="code-input" placeholder="••••" maxlength="4">
+                <div style="text-align: center;">
+                    <button class="btn" onclick="checkCode()">Access</button>
+                    <button class="btn back-btn" onclick="closeAdminPanel()">Cancel</button>
+                </div>
+                <div id="error-message" class="error-message"></div>
+            </div>
+
+            <div id="admin-menu" class="admin-menu">
+                <div class="access-granted">✅ Access Granted - Choose Action</div>
+                <h2>Admin Control Panel</h2>
+                
+                <div class="menu-buttons">
+                    <button class="menu-btn" onclick="showAddForm()">
+                        <span class="menu-btn-icon">➕</span>
+                        Add Bookmark
+                    </button>
+                    <button class="menu-btn" onclick="toggleDeleteMode()">
+                        <span class="menu-btn-icon">🗑️</span>
+                        Delete Bookmarks
+                    </button>
+                    <button class="menu-btn" onclick="openSite()">
+                        <span class="menu-btn-icon">🌐</span>
+                        Open Site
+                    </button>
+                    <button class="menu-btn shutdown-btn" onclick="shutdownSite()">
+                        <span class="menu-btn-icon">🔒</span>
+                        Shutdown Site
+                    </button>
+                </div>
+                
+                <button class="btn back-btn" onclick="closeAdminPanel()">Close Panel</button>
+            </div>
+
+            <div id="add-section" class="add-form">
+                <h3 style="margin-bottom: 20px; color: #4ecdc4;">Add New Bookmark</h3>
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" placeholder="Enter bookmark title">
+                </div>
+                <div class="form-group">
+                    <label for="url">URL:</label>
+                    <input type="url" id="url" placeholder="https://example.com">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category">
+                        <option value="gaming">🎮 Gaming</option>
+                        <option value="programming">💻 Programming</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="addBookmark()">Add Bookmark</button>
+                <button class="btn back-btn" onclick="backToMenu()">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let bookmarks = {
+            gaming: [
+                {
+                    id: 1,
+                    title: "Steam Store",
+                    url: "https://store.steampowered.com",
+                    category: "gaming"
+                },
+                {
+                    id: 2,
+                    title: "itch.io - Indie Games",
+                    url: "https://itch.io",
+                    category: "gaming"
+                },
+                {
+                    id: 3,
+                    title: "GameDev.tv",
+                    url: "https://gamedev.tv",
+                    category: "gaming"
+                }
+            ],
+            programming: [
+                {
+                    id: 4,
+                    title: "GitHub",
+                    url: "https://github.com",
+                    category: "programming"
+                },
+                {
+                    id: 5,
+                    title: "Stack Overflow",
+                    url: "https://stackoverflow.com",
+                    category: "programming"
+                },
+                {
+                    id: 6,
+                    title: "MDN Web Docs",
+                    url: "https://developer.mozilla.org",
+                    category: "programming"
+                }
+            ]
+        };
+
+        const SECRET_CODE = "3301";
+        let isDeleteMode = false;
+        // Initialize siteOnline based on localStorage
+        let siteOnline = !(localStorage.getItem('siteOffline') === 'true');
+
+        function openAdminPanel() {
+            // Only allow opening admin panel directly if site is online
+            // If site is offline, the admin panel should only open from the offline popup
+            if (!siteOnline && !document.getElementById('site-offline').style.display === 'flex') {
+                return; 
+            }
+            document.getElementById('admin-panel').style.display = 'block';
+            document.getElementById('access-code').focus();
+        }
+
+        // New function to open admin panel specifically from the offline popup
+        function openAdminPanelFromOffline() {
+            document.getElementById('site-offline').style.display = 'none'; // Hide the offline popup
+            openAdminPanel(); // Then open the regular admin panel
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').style.display = 'none';
+            resetAdminPanel();
+            // If site is offline, ensure the offline popup is visible after closing admin panel
+            if (!siteOnline) {
+                document.getElementById('site-offline').style.display = 'flex';
+            }
+        }
+
+        function resetAdminPanel() {
+            document.getElementById('code-section').style.display = 'block';
+            document.getElementById('admin-menu').style.display = 'none';
+            document.getElementById('add-section').style.display = 'none';
+            document.getElementById('access-code').value = '';
+            document.getElementById('error-message').textContent = '';
+            isDeleteMode = false;
+            document.body.classList.remove('delete-mode');
+        }
+
+        function checkCode() {
+            const code = document.getElementById('access-code').value;
+            const errorDiv = document.getElementById('error-message');
+            
+            if (code === SECRET_CODE) {
+                document.getElementById('code-section').style.display = 'none';
+                document.getElementById('admin-menu').style.display = 'block';
+                // If coming from offline state, now that access is granted, allow openSite button
+                if (!siteOnline) {
+                    showNotification('Access Granted! Site is currently offline. Use "Open Site" to bring it back online.', '#4ecdc4');
+                }
+            } else {
+                errorDiv.textContent = 'Invalid access code. Access denied.';
+                document.getElementById('access-code').value = '';
+                
+                const input = document.getElementById('access-code');
+                input.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        }
+
+        function showAddForm() {
+            document.getElementById('admin-menu').style.display = 'none';
+            document.getElementById('add-section').style.display = 'block';
+        }
+
+        function backToMenu() {
+            document.getElementById('add-section').style.display = 'none';
+            document.getElementById('admin-menu').style.display = 'block';
+            // Clear form
+            document.getElementById('title').value = '';
+            document.getElementById('url').value = '';
+        }
+
+        function toggleDeleteMode() {
+            isDeleteMode = !isDeleteMode;
+            document.body.classList.toggle('delete-mode', isDeleteMode);
+            
+            const btn = event.target.closest('.menu-btn');
+            if (isDeleteMode) {
+                btn.innerHTML = '<span class="menu-btn-icon">✅</span>Delete Mode ON';
+                btn.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+                showNotification('Delete mode activated - Click delete buttons on bookmarks', '#27ae60');
+            } else {
+                btn.innerHTML = '<span class="menu-btn-icon">🗑️</span>Delete Bookmarks';
+                btn.style.background = '';
+                showNotification('Delete mode deactivated', '#ff4757');
+            }
+            
+            renderBookmarks();
+        }
+
+        function shutdownSite() {
+            const confirm = window.confirm('Are you sure you want to shutdown the site? This will make it inaccessible to visitors.');
+            if (confirm) {
+                siteOnline = false;
+                localStorage.setItem('siteOffline', 'true'); // Set flag in localStorage
+                document.getElementById('site-offline').style.display = 'flex';
+                document.getElementById('site-status').textContent = '🔴 Offline';
+                document.getElementById('site-status').classList.add('offline');
+                closeAdminPanel();
+                showNotification('Site has been shut down', '#ff4757');
+            }
+        }
+
+        function openSite() {
+            siteOnline = true;
+            localStorage.removeItem('siteOffline'); // Remove flag from localStorage
+            document.getElementById('site-offline').style.display = 'none';
+            document.getElementById('site-status').textContent = '🟢 Online';
+            document.getElementById('site-status').classList.remove('offline');
+            showNotification('Site is now online', '#27ae60');
+            closeAdminPanel(); // Close admin panel after opening site
+        }
+
+        function addBookmark() {
+            const title = document.getElementById('title').value.trim();
+            const url = document.getElementById('url').value.trim();
+            const category = document.getElementById('category').value;
+
+            if (!title || !url) {
+                alert('Please fill in both title and URL');
+                return;
+            }
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                alert('Please enter a valid URL starting with http:// or https://');
+                return;
+            }
+
+            const bookmark = {
+                id: Date.now(),
+                title,
+                url,
+                category
+            };
+
+            bookmarks[category].push(bookmark);
+            renderBookmarks();
+            
+            // Clear form
+            document.getElementById('title').value = '';
+            document.getElementById('url').value = '';
+            
+            showNotification(`"${title}" added successfully`, '#27ae60');
+        }
+
+        function deleteBookmark(id, category) {
+            if (!isDeleteMode) return;
+            
+            const bookmark = bookmarks[category].find(b => b.id === id);
+            if (!bookmark) return;
+            
+            const confirmDelete = confirm(`Are you sure you want to delete "${bookmark.title}"?`);
+            if (!confirmDelete) return;
+            
+            bookmarks[category] = bookmarks[category].filter(bookmark => bookmark.id !== id);
+            renderBookmarks();
+            
+            showNotification(`"${bookmark.title}" deleted successfully`, '#27ae60');
+        }
+
+        function renderBookmarks() {
+            ['gaming', 'programming'].forEach(category => {
+                const container = document.getElementById(`${category}-links`);
+                
+                if (bookmarks[category].length === 0) {
+                    container.innerHTML = `<div class="empty-state">No ${category} links available yet.</div>`;
+                    return;
+                }
+
+                container.innerHTML = bookmarks[category].map(bookmark => `
+                    <div class="link-item">
+                        <button class="delete-btn" onclick="deleteBookmark(${bookmark.id}, '${category}')" title="Delete bookmark">Delete</button>
+                        <div class="link-title">${bookmark.title}</div>
+                        <a href="${bookmark.url}" target="_blank" class="link-url">${bookmark.url}</a>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function showNotification(message, color) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${color};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 2000;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Enter key handling
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (e.target.id === 'access-code') {
+                    checkCode();
+                } else if (e.target.id === 'title' || e.target.id === 'url') {
+                    addBookmark();
+                }
+            }
+        });
+
+        // Initial render
+        renderBookmarks();
+
+        // Check site status on load and display giant popup if offline
+        window.onload = function() {
+            if (!siteOnline) {
+                document.getElementById('site-offline').style.display = 'flex';
+                document.getElementById('site-status').textContent = '🔴 Offline';
+                document.getElementById('site-status').classList.add('offline');
+                // Hide main content if site is offline (optional, but good for giant popup)
+                document.querySelector('.container').style.display = 'none';
+                document.querySelector('.secret-access').style.display = 'none';
+            } else {
+                // Ensure main content is visible if site is online
+                document.querySelector('.container').style.display = 'block';
+                document.querySelector('.secret-access').style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>
