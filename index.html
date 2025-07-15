@@ -554,23 +554,22 @@
             }
         }
     
-@media (max-width: 768px) {
-    .delete-btn {
-        display: block !important;
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        z-index: 100;
-        padding: 8px 12px;
-    }
+        @media (max-width: 768px) {
+            .delete-btn {
+                display: block !important;
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                z-index: 100;
+                padding: 8px 12px;
+            }
 
-    .link-item {
-        position: relative;
-        padding-right: 60px;
-    }
-}
-
-</style>
+            .link-item {
+                position: relative;
+                padding-right: 60px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="site-offline" class="site-offline">
@@ -804,10 +803,10 @@
         function toggleDeleteMode() {
             isDeleteMode = !isDeleteMode;
             if (isDeleteMode) {
-    document.body.classList.add('delete-mode');
-} else {
-    document.body.classList.remove('delete-mode');
-}
+                document.body.classList.add('delete-mode');
+            } else {
+                document.body.classList.remove('delete-mode');
+            }
             
             const btn = event.target.closest('.menu-btn');
             if (isDeleteMode) {
@@ -881,13 +880,16 @@
         function deleteBookmark(id, category) {
             if (!isDeleteMode) return;
             
-            const bookmark = bookmarks[category].find(b => b.id === id);
+            // Convert id to number before comparison
+            const numericId = Number(id);
+            const bookmark = bookmarks[category].find(b => b.id === numericId);
+            
             if (!bookmark) return;
             
             const confirmDelete = confirm(`Are you sure you want to delete "${bookmark.title}"?`);
             if (!confirmDelete) return;
             
-            bookmarks[category] = bookmarks[category].filter(bookmark => bookmark.id !== id);
+            bookmarks[category] = bookmarks[category].filter(bookmark => bookmark.id !== numericId);
             renderBookmarks();
             
             showNotification(`"${bookmark.title}" deleted successfully`, '#27ae60');
